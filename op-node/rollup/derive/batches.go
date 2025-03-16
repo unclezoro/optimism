@@ -87,12 +87,6 @@ func checkSingularBatch(cfg *rollup.Config, log log.Logger, l1Blocks []eth.L1Blo
 		return BatchDrop
 	}
 
-	// dependent on above timestamp check. If the timestamp is correct, then it must build on top of the safe head.
-	if batch.ParentHash != l2SafeHead.Hash {
-		log.Warn("ignoring batch with mismatching parent hash", "current_safe_head", l2SafeHead.Hash)
-		return BatchDrop
-	}
-
 	// Filter out batches that were included too late.
 	if uint64(batch.EpochNum)+cfg.SeqWindowSize < l1InclusionBlock.Number {
 		log.Warn("batch was included too late, sequence window expired")
@@ -245,10 +239,6 @@ func checkSpanBatchPrefix(ctx context.Context, cfg *rollup.Config, log log.Logge
 			// unable to validate the batch for now. retry later.
 			return BatchUndecided, eth.L2BlockRef{}
 		}
-	}
-	if !batch.CheckParentHash(parentBlock.Hash) {
-		log.Warn("ignoring batch with mismatching parent hash", "parent_block", parentBlock.Hash)
-		return BatchDrop, parentBlock
 	}
 
 	// Filter out batches that were included too late.
