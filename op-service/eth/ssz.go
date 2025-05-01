@@ -7,6 +7,7 @@ import (
 	"io"
 	"math"
 	"sync"
+	"time"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
@@ -377,6 +378,8 @@ func (payload *ExecutionPayload) UnmarshalSSZ(version BlockVersion, scope uint32
 	if err != nil {
 		return fmt.Errorf("failed to unmarshal transactions list: %w", err)
 	}
+	fmt.Printf("blocknum %s, transaction len %d time %s, \n", payload.BlockNumber.String(), len(txs), time.Now().String())
+
 	payload.Transactions = txs
 
 	if version.HasWithdrawals() {

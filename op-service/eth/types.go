@@ -361,7 +361,7 @@ func BlockAsPayload(bl *types.Block, config *params.ChainConfig) (*ExecutionPayl
 	if baseFee == nil {
 		return nil, fmt.Errorf("base fee was nil")
 	}
-
+	fmt.Println("transaction len", len(opaqueTxs))
 	payload := &ExecutionPayload{
 		ParentHash:    bl.ParentHash(),
 		FeeRecipient:  bl.Coinbase(),

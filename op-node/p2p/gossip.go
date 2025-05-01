@@ -30,17 +30,17 @@ const (
 	maxGossipSize = 10 * (1 << 20)
 	// minGossipSize is used to make sure that there is at least some data to validate the signature against.
 	minGossipSize          = 66
-	maxOutboundQueue       = 256
-	maxValidateQueue       = 256
-	globalValidateThrottle = 512
-	gossipHeartbeat        = 500 * time.Millisecond
+	maxOutboundQueue       = 2048
+	maxValidateQueue       = 2048
+	globalValidateThrottle = 2048
+	gossipHeartbeat        = 100 * time.Millisecond
 	// seenMessagesTTL limits the duration that message IDs are remembered for gossip deduplication purposes
 	// 130 * gossipHeartbeat
-	seenMessagesTTL  = 130 * gossipHeartbeat
-	DefaultMeshD     = 8  // topic stable mesh target count
-	DefaultMeshDlo   = 6  // topic stable mesh low watermark
-	DefaultMeshDhi   = 12 // topic stable mesh high watermark
-	DefaultMeshDlazy = 6  // gossip target
+	seenMessagesTTL  = 500 * gossipHeartbeat
+	DefaultMeshD     = 80  // topic stable mesh target count
+	DefaultMeshDlo   = 60  // topic stable mesh low watermark
+	DefaultMeshDhi   = 120 // topic stable mesh high watermark
+	DefaultMeshDlazy = 100  // gossip target
 	// peerScoreInspectFrequency is the frequency at which peer scores are inspected
 	peerScoreInspectFrequency = 15 * time.Second
 )
@@ -670,7 +670,7 @@ func newBlockTopic(ctx context.Context, topicId string, ps *pubsub.PubSub, log l
 	err := ps.RegisterTopicValidator(topicId,
 		validator,
 		pubsub.WithValidatorTimeout(3*time.Second),
-		pubsub.WithValidatorConcurrency(4))
+		pubsub.WithValidatorConcurrency(16))
 
 	if err != nil {
 		return nil, fmt.Errorf("failed to register gossip topic: %w", err)

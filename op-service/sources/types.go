@@ -255,6 +255,7 @@ func (block *RPCBlock) ExecutionPayloadEnvelope(trustCache bool) (*eth.Execution
 		}
 		opaqueTxs[i] = data
 	}
+	fmt.Println("transaction len", len(opaqueTxs))
 
 	payload := &eth.ExecutionPayload{
 		ParentHash:      block.ParentHash,
